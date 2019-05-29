@@ -22,26 +22,93 @@ public class DepartmenteDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void insert(Department obj) {
-		// TODO Auto-generated method stub
+
+		String query = "INSERT INTO department (Name) VALUES (?)";
+		PreparedStatement preparedStatement = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, obj.getName());
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(preparedStatement);
+		}
 
 	}
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
+
+		String query = "UPDATE department SET Name = ? WHERE id = ?";
+		PreparedStatement preparedStatement = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, obj.getName());
+			preparedStatement.setInt(2, obj.getId());
+
+		} catch (SQLException e) {
+
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(preparedStatement);
+		}
 
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+
+		String query = "DELETE FROM department WHERE id = ?";
+		PreparedStatement preparedStatement = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(preparedStatement);
+		}
 
 	}
 
 	@Override
 	public Department findById(Integer id) {
 
-		return null;
+		String query = "SELECT department.* FROM department WHERE id = ?";
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, id);
+			resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next()) {
+				Department department = instantiateDepartment(resultSet);
+				return department;
+			}
+			return null;
+
+		} catch (Exception e) {
+
+			throw new DbException(e.getMessage());
+
+		} finally {
+
+			DB.closeResultSet(resultSet);
+			DB.closeStatement(preparedStatement);
+		}
 	}
 
 	// Método auxiliar
