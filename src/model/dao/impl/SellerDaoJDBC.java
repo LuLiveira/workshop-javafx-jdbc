@@ -145,19 +145,19 @@ public class SellerDaoJDBC implements SellerDao {
 		}
 	}
 
-	// Método auxiliar
+	// Mï¿½todo auxiliar
 	private Seller instantiateSeller(ResultSet resultSet, Department department) throws SQLException {
 		Seller seller = new Seller();
 		seller.setId(resultSet.getInt("Id"));
 		seller.setName(resultSet.getString("Name"));
 		seller.setEmail(resultSet.getString("Email"));
-		seller.setBirthDate(resultSet.getDate("BirthDate"));
+		seller.setBirthDate(new java.util.Date(resultSet.getTimestamp("BirthDate").getTime()));
 		seller.setBaseSalary(resultSet.getDouble("BaseSalary"));
 		seller.setDepartment(department);
 		return seller;
 	}
 
-	// Método auxiliar
+	// Mï¿½todo auxiliar
 	private Department instantiateDepartment(ResultSet resultSet) throws SQLException {
 		Department department = new Department();
 		department.setId(resultSet.getInt("DepartmentId"));
